@@ -115,6 +115,40 @@ class userController{
             })
         }
     }
+    static async getById(req, res){
+        try {
+            const id = +req.params.id
+            const response = await User.findOne({
+                where:{
+                    id
+                }
+            })
+            return res.status(200).json({username: response.username})
+        } catch (error) {
+            return res.status(500).json(response)
+        }
+    }
+    static async update(req, res){
+        try {
+            const id = +req.params.id
+            let payload = {
+                username: req.body.username,
+                password: req.body.password
+            }
+            const response = await User.update(payload,{
+                where:{
+                    id
+                },
+                individualHooks: true
+            })
+            return res.status(201).json({
+                response,
+                message : "Update Success !!!"
+            })
+        } catch (error) {
+            return res.status(500).json(response)
+        }
+    }
 }
 
 module.exports = userController
